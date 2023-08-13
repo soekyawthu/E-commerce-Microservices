@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace Discount.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
-public class BasketController : ControllerBase
+[Route("api/v1/[controller]")]
+public class DiscountController : ControllerBase
 {
-    private readonly ILogger<BasketController> _logger;
+    private readonly ILogger<DiscountController> _logger;
     private readonly IDiscountRepository _repository;
 
-    public BasketController(ILogger<BasketController> logger, IDiscountRepository repository)
+    public DiscountController(ILogger<DiscountController> logger, IDiscountRepository repository)
     {
         _logger = logger;
         _repository = repository;
