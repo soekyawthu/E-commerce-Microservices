@@ -2,6 +2,8 @@ using System.Net;
 using Basket.API.Entities;
 using Basket.API.GrpcServices;
 using Basket.API.Repositories;
+using EventBus.Messages.Events;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Basket.API.Controllers;
@@ -13,12 +15,17 @@ public class BasketController : ControllerBase
     private readonly ILogger<BasketController> _logger;
     private readonly IBasketRepository _repository;
     private readonly DiscountService _discountService;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public BasketController(ILogger<BasketController> logger, IBasketRepository repository, DiscountService discountService)
+    public BasketController(ILogger<BasketController> logger, 
+        IBasketRepository repository, 
+        DiscountService discountService,
+        IPublishEndpoint publishEndpoint)
     {
         _logger = logger;
         _repository = repository;
         _discountService = discountService;
+        _publishEndpoint = publishEndpoint;
     }
     
     [HttpGet("{userName}", Name = "GetBasket")]
@@ -52,4 +59,25 @@ public class BasketController : ControllerBase
         return Ok();
     }
 
+    [Route("[action]")]
+    [HttpPost]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    public async Task<ActionResult<ShoppingCart>> Checkout([FromBody] BasketCheckout checkout)
+    {
+        var basket = await _repository.GetBasket(checkout.UserName);
+
+        if (basket is null)
+            return BadRequest();
+
+        checkout.TotalPrice = basket.TotalPrice;
+        
+        await _publishEndpoint.Publish(checkout);
+
+        await _repository.DeleteBasket(checkout.UserName);
+        
+        _logger.LogInformation("Completed Checkout Operation");
+        
+        return Ok();
+    }
 }

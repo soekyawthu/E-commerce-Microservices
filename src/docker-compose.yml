@@ -12,6 +12,9 @@ services:
     
   orderdb:
     image: mcr.microsoft.com/mssql/server
+    
+  rabbitmq:
+    image: rabbitmq:3-management
   
   portainer:
     image: portainer/portainer-ce
