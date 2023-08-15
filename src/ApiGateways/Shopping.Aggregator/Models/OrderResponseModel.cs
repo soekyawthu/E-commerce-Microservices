@@ -1,8 +1,6 @@
-using Ordering.Domain.Common;
+namespace Shopping.Aggregator.Models;
 
-namespace Ordering.Domain.Entities;
-
-public class Order : EntityBase
+public class OrderResponseModel
 {
     public required string UserName { get; set; }
     public decimal TotalPrice { get; set; }

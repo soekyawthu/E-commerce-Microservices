@@ -21,13 +21,19 @@ public class OrderSeed
         {
             new()
             {
-                UserName = "skt", 
-                FirstName = "Soe Kyaw", 
-                LastName = "Thu", 
-                EmailAddress = "soekyawthu.dev@gmail.com", 
-                AddressLine = "Yangon", 
-                Country = "Myanmar", 
-                TotalPrice = 350
+                UserName = "skt",
+                FirstName = "Soe Kyaw",
+                LastName = "Thu",
+                EmailAddress = "soekyawthu.dev@gmail.com",
+                AddressLine = "Yangon",
+                Country = "Myanmar",
+                TotalPrice = 350,
+                State = string.Empty,
+                ZipCode = string.Empty,
+                CardName = string.Empty,
+                CardNumber = string.Empty,
+                Expiration = string.Empty,
+                CVV = string.Empty
             }
         };
     }

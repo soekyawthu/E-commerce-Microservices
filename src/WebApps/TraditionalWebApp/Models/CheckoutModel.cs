@@ -1,8 +1,6 @@
-using Ordering.Domain.Common;
+namespace TraditionalWebApp.Models;
 
-namespace Ordering.Domain.Entities;
-
-public class Order : EntityBase
+public class CheckoutModel
 {
     public required string UserName { get; set; }
     public decimal TotalPrice { get; set; }

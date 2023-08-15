@@ -135,6 +135,19 @@
       ],
       "UpstreamPathTemplate": "/order",
       "UpstreamHttpMethod": [ "Post", "Put" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/v1/shopping/{username}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5005
+        }
+      ],
+      "UpstreamPathTemplate": "/shopping/{username}",
+      "UpstreamHttpMethod": [ "Get" ]
     }
   ],
   "GlobalConfiguration": {

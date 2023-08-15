@@ -16,7 +16,12 @@ builder.Services.AddOcelot()
 var app = builder.Build();
 
 app.UseRouting();
-app.MapGet("/", () => "Hello World!");
+
+// Will work with "app.UseEndPoints()" when use "app.UseOcelot()". If not, will not work this url
+#pragma warning disable ASP0014
+app.UseEndpoints( endpoints => endpoints.MapGet("/", () => "Hello World"));
+#pragma warning restore ASP0014
+
 
 await app.UseOcelot();
 
