@@ -133,3 +133,16 @@ services:
       - ordering.api
     ports:
       - "8005:80"
+  
+  webapp.traditional:
+    container_name: webapp.traditional
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ApiSettings:GatewayUrl=http://ocelotapigateway"
+    depends_on:
+      - ocelotapigateway
+      - catalog.api
+      - basket.api
+      - ordering.api
+    ports:
+      - "8006:80"

@@ -60,6 +60,12 @@ services:
     build:
       context: .
       dockerfile: ApiGateways/Shopping.Aggregator/Dockerfile
+      
+  webapp.traditional:
+    image: ${DOCKER_REGISTRY-}traditionalwebapp
+    build:
+      context: .
+      dockerfile: WebApps/TraditionalWebApp/Dockerfile
 
 volumes:
   mongo_data:
