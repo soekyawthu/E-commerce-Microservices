@@ -5,6 +5,7 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["WebApps/TraditionalWebApp/TraditionalWebApp.csproj", "WebApps/TraditionalWebApp/"]
+COPY ["BuildingBlocks/Common.Logging/Common.Logging.csproj", "BuildingBlocks/Common.Logging/"]
 RUN dotnet restore "WebApps/TraditionalWebApp/TraditionalWebApp.csproj"
 COPY . .
 WORKDIR "/src/WebApps/TraditionalWebApp"

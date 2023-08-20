@@ -1,10 +1,12 @@
 using System.Data;
+using Common.Logging;
 using Discount.API.Repositories;
 using Npgsql;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Host.UseSerilog(SeriLogger.Configure);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

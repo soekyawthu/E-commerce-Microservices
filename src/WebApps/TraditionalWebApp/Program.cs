@@ -1,6 +1,10 @@
+using Common.Logging;
+using Serilog;
 using TraditionalWebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog(SeriLogger.Configure);
 
 // Add services to the container.
 builder.Services.AddRazorPages();

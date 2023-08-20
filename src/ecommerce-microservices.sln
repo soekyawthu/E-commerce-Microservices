@@ -45,6 +45,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApps", "WebApps", "{3F8C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraditionalWebApp", "WebApps\TraditionalWebApp\TraditionalWebApp.csproj", "{14766E35-A63A-437F-A225-C1F235B8A346}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Logging", "BuildingBlocks\Common.Logging\Common.Logging.csproj", "{646F0697-DDD0-430E-A125-301DD3080BAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,6 +105,10 @@ Global
 		{14766E35-A63A-437F-A225-C1F235B8A346}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14766E35-A63A-437F-A225-C1F235B8A346}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14766E35-A63A-437F-A225-C1F235B8A346}.Release|Any CPU.Build.0 = Release|Any CPU
+		{646F0697-DDD0-430E-A125-301DD3080BAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{646F0697-DDD0-430E-A125-301DD3080BAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{646F0697-DDD0-430E-A125-301DD3080BAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{646F0697-DDD0-430E-A125-301DD3080BAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -127,5 +133,6 @@ Global
 		{E9314F2F-8ABB-41EF-82FA-648A4C56BF68} = {23F9F062-8110-42F7-AE0F-BE7DCD87038B}
 		{B2F29F35-EEB0-40DA-B80A-BB57490AA8E6} = {23F9F062-8110-42F7-AE0F-BE7DCD87038B}
 		{14766E35-A63A-437F-A225-C1F235B8A346} = {3F8CA4F9-B85F-4BDF-A0D5-3712793A99B4}
+		{646F0697-DDD0-430E-A125-301DD3080BAF} = {55F3F11A-70AD-4C81-8803-31CBCEDC0D03}
 	EndGlobalSection
 EndGlobal
