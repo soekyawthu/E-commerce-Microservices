@@ -10,13 +10,16 @@ builder.Host.UseSerilog(SeriLogger.Configure);
 builder.Services.AddRazorPages();
 
 builder.Services.AddHttpClient<ICatalogService, CatalogService>(client => 
-    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayUrl"]!));
+    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayUrl"]!))
+    .AddHttpMessageHandler<LoggingDelegatingHandler>();
 
 builder.Services.AddHttpClient<IBasketService, BasketService>(client => 
-    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayUrl"]!));
+    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayUrl"]!))
+    .AddHttpMessageHandler<LoggingDelegatingHandler>();
 
 builder.Services.AddHttpClient<IOrderService, OrderService>(client => 
-    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayUrl"]!));
+    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayUrl"]!))
+    .AddHttpMessageHandler<LoggingDelegatingHandler>();
 
 var app = builder.Build();
 
