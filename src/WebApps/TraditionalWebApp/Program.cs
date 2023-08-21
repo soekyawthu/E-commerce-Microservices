@@ -9,6 +9,8 @@ builder.Host.UseSerilog(SeriLogger.Configure);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+builder.Services.AddTransient<LoggingDelegatingHandler>();
+
 builder.Services.AddHttpClient<ICatalogService, CatalogService>(client => 
     client.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayUrl"]!))
     .AddHttpMessageHandler<LoggingDelegatingHandler>();

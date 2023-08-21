@@ -1,5 +1,6 @@
 using System.Data;
 using Common.Logging;
+using Discount.API.Extensions;
 using Discount.API.Repositories;
 using Npgsql;
 using Serilog;
@@ -25,6 +26,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.MigrateDatabase<Program>();
 
 app.UseHttpsRedirection();
 

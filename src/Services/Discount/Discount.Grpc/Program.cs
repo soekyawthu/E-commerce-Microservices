@@ -1,5 +1,6 @@
 using System.Data;
 using Common.Logging;
+using Discount.Grpc.Extensions;
 using Discount.Grpc.Repositories;
 using Discount.Grpc.Services;
 using Npgsql;
@@ -22,7 +23,8 @@ builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.MigrateDatabase<Program>();
+
 app.MapGrpcService<DiscountService>();
 app.MapGet("/",
     () =>
