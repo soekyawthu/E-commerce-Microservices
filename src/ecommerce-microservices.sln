@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraditionalWebApp", "WebApp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Logging", "BuildingBlocks\Common.Logging\Common.Logging.csproj", "{646F0697-DDD0-430E-A125-301DD3080BAF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebStatus", "WebApps\WebStatus\WebStatus.csproj", "{6C894247-86DB-4265-9349-C659545EAB43}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +111,10 @@ Global
 		{646F0697-DDD0-430E-A125-301DD3080BAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{646F0697-DDD0-430E-A125-301DD3080BAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{646F0697-DDD0-430E-A125-301DD3080BAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C894247-86DB-4265-9349-C659545EAB43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C894247-86DB-4265-9349-C659545EAB43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C894247-86DB-4265-9349-C659545EAB43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C894247-86DB-4265-9349-C659545EAB43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -134,5 +140,6 @@ Global
 		{B2F29F35-EEB0-40DA-B80A-BB57490AA8E6} = {23F9F062-8110-42F7-AE0F-BE7DCD87038B}
 		{14766E35-A63A-437F-A225-C1F235B8A346} = {3F8CA4F9-B85F-4BDF-A0D5-3712793A99B4}
 		{646F0697-DDD0-430E-A125-301DD3080BAF} = {55F3F11A-70AD-4C81-8803-31CBCEDC0D03}
+		{6C894247-86DB-4265-9349-C659545EAB43} = {3F8CA4F9-B85F-4BDF-A0D5-3712793A99B4}
 	EndGlobalSection
 EndGlobal

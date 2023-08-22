@@ -1,4 +1,6 @@
 using Common.Logging;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 using Shopping.Aggregator;
 using Shopping.Aggregator.Services;
@@ -31,6 +33,11 @@ builder.Services.AddHttpClient<IOrderService, OrderService>(client =>
     .AddPolicyHandler(HttpPolicy.GetRetryPolicy())
     .AddPolicyHandler(HttpPolicy.GetCircuitBreakerPolicy());
 
+builder.Services.AddHealthChecks()
+    .AddUrlGroup(new Uri(builder.Configuration["ApiSettings:CatalogUrl"]!), "Catalog Service")
+    .AddUrlGroup(new Uri(builder.Configuration["ApiSettings:BasketUrl"]!), "Basket Service")
+    .AddUrlGroup(new Uri(builder.Configuration["ApiSettings:OrderingUrl"]!), "Order Service");
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -40,6 +47,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
+
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.MapControllers();
 
