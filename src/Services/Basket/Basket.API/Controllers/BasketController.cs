@@ -1,4 +1,3 @@
-using System.Net;
 using Basket.API.GrpcServices;
 using Basket.Application.Features.ShoppingCart.Commands.CheckoutBasket;
 using Basket.Application.Features.ShoppingCart.Commands.DeleteBasket;
@@ -30,8 +29,22 @@ public class BasketController : ControllerBase
     [HttpGet("{userName}", Name = "GetBasket")]
     public async Task<ActionResult<ShoppingCart>> GetBasket(string userName)
     {
-        var basket = await _mediator.Send(new GetBasketQuery { Username = userName });
-        return Ok(basket);
+        try
+        {
+            var basket = await _mediator.Send(new GetBasketQuery { Username = userName });
+            return Ok(basket);
+        }
+        catch (InvalidOperationException e)
+        {
+            _logger.LogWarning(e, "Client made a bad request");
+            return BadRequest(new { e.Message });
+        }
+        catch (Exception e)
+        {
+            const string errorMessage = "Error while processing request to get basket";
+            _logger.LogError(e, errorMessage);
+            return StatusCode(StatusCodes.Status500InternalServerError, new { Message = errorMessage });
+        }
     }
 
     [HttpPost]
@@ -44,23 +57,64 @@ public class BasketController : ControllerBase
             shoppingCartItem.Price -= coupon.Amount;
         }*/
 
-        var result = await _mediator.Send(command);
-
-        return Accepted();
+        try
+        {
+            await _mediator.Send(command);
+            return Accepted();
+        }
+        catch (InvalidOperationException e)
+        {
+            _logger.LogWarning(e, "Client made a bad request");
+            return BadRequest(new { e.Message });
+        }
+        catch (Exception e)
+        {
+            const string errorMessage = "Error while processing request to add or update basket";
+            _logger.LogError(e, errorMessage);
+            return StatusCode(StatusCodes.Status500InternalServerError, new { Message = errorMessage });
+        }
     }
 
     [HttpDelete("{userName}", Name = "DeleteBasket")]
     public async Task<IActionResult> DeleteBasket(string userName)
     {
-        await _mediator.Send(new DeleteBasketCommand { Username = userName });
-        return Ok();
+        try
+        {
+            await _mediator.Send(new DeleteBasketCommand { Username = userName });
+            return NoContent();
+        }
+        catch (InvalidOperationException e)
+        {
+            _logger.LogWarning(e, "Client made a bad request");
+            return BadRequest(new { e.Message });
+        }
+        catch (Exception e)
+        {
+            const string errorMessage = "Error while processing request to delete basket";
+            _logger.LogError(e, errorMessage);
+            return StatusCode(StatusCodes.Status500InternalServerError, new { Message = errorMessage });
+        }
     }
 
     [Route("[action]")]
     [HttpPost]
     public async Task<ActionResult<ShoppingCart>> Checkout([FromBody] CheckoutBasketCommand command)
     {
-        var result = await _mediator.Send(command);
-        return Ok();
+        try
+        {
+            await _mediator.Send(command);
+            return Accepted();
+        }
+        catch (InvalidOperationException e)
+        {
+            _logger.LogWarning(e, "Client made a bad request");
+            return BadRequest(new { e.Message });
+        }
+        catch (Exception e)
+        {
+            const string errorMessage = "Error while processing request to checkout basket";
+            _logger.LogError(e, errorMessage);
+            return StatusCode(StatusCodes.Status500InternalServerError, new { Message = errorMessage });
+        }
     }
 }
