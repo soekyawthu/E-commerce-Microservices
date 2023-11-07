@@ -6,7 +6,7 @@ using Ordering.Application.Features.Orders.Commands.CheckoutOrder;
 
 namespace Ordering.API.EventBusConsumers;
 
-public class BasketCheckoutConsumer : IConsumer<BasketCheckout>
+public class BasketCheckoutConsumer : IConsumer<BasketCheckedOutEvent>
 {
     private readonly ILogger<BasketCheckoutConsumer> _logger;
     private readonly IMediator _mediator;
@@ -19,7 +19,7 @@ public class BasketCheckoutConsumer : IConsumer<BasketCheckout>
         _mapper = mapper;
     }
     
-    public async Task Consume(ConsumeContext<BasketCheckout> context)
+    public async Task Consume(ConsumeContext<BasketCheckedOutEvent> context)
     {
         var checkoutOrderCommand = _mapper.Map<CheckoutOrderCommand>(context.Message);
         await _mediator.Send(checkoutOrderCommand);

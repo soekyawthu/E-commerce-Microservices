@@ -33,7 +33,6 @@ public class OrderSeed
                 CardName = string.Empty,
                 CardNumber = string.Empty,
                 Expiration = string.Empty,
-                CVV = string.Empty
             }
         };
     }

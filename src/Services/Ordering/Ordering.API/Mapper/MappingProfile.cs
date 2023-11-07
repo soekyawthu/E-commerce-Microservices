@@ -8,6 +8,6 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<CheckoutOrderCommand, BasketCheckout>().ReverseMap();
+        CreateMap<CheckoutOrderCommand, BasketCheckedOutEvent>().ReverseMap();
     }
 }

@@ -1,9 +1,8 @@
-using Ordering.Domain.Common;
+namespace Basket.Domain.Entities;
 
-namespace Ordering.Domain.Entities;
-
-public class Order : EntityBase
+public class BasketCheckout
 {
+    public Guid ShoppingCartId { get; set; }
     public required string UserName { get; set; }
     public decimal TotalPrice { get; set; }
 
@@ -21,4 +20,6 @@ public class Order : EntityBase
     public required string CardNumber { get; set; }
     public required string Expiration { get; set; }
     public int PaymentMethod { get; set; }
+
+    public IEnumerable<ShoppingCartItem> Items { get; set; } = new List<ShoppingCartItem>();
 }

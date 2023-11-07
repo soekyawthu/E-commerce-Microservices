@@ -1,14 +1,11 @@
-namespace Basket.API.Entities;
+namespace Basket.Domain.Entities;
 
 public class ShoppingCart
 {
+    public Guid ShoppingCartId { get; set; }
     public string UserName { get; set; }
     public List<ShoppingCartItem> Items { get; set; } = new();
-
-    public ShoppingCart()
-    {
-    }
-
+    
     public ShoppingCart(string userName)
     {
         UserName = userName;
