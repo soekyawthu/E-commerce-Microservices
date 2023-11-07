@@ -50,7 +50,6 @@ public class BasketController : ControllerBase
     }
 
     [HttpDelete("{userName}", Name = "DeleteBasket")]
-    [ProducesResponseType(typeof(void), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> DeleteBasket(string userName)
     {
         await _mediator.Send(new DeleteBasketCommand { Username = userName });
