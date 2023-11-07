@@ -1,6 +1,6 @@
 namespace EventBus.Messages.Events;
 
-public class BasketCheckedOutEvent : MessageBase
+public class OrderSubmittedEvent : MessageBase
 {
     public Guid ShoppingCartId { get; set; }
     public required string UserName { get; set; }
@@ -23,7 +23,6 @@ public class BasketCheckedOutEvent : MessageBase
 
     public IEnumerable<Product> Items { get; set; } = new List<Product>();
 }
-
 
 public class Product
 {
