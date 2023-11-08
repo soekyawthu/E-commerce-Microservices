@@ -1,6 +1,6 @@
 namespace EventBus.Messages.Events;
 
-public class OrderAccepted
+public class OrderAcceptedEvent
 {
     public Guid OrderId { get; set; }
 }

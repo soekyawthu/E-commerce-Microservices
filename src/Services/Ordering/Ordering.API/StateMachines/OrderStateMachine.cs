@@ -9,7 +9,7 @@ public class OrderStateMachine : MassTransitStateMachine<OrderState>
     public State Submitted { get; private set; } = null!;
     public State Accepted { get; private set; } = null!;
     public Event<OrderSubmittedEvent> OrderSubmitted { get; private set; } = null!;
-    public Event<OrderAccepted> OrderAccepted { get; private set; } = null!;
+    public Event<OrderAcceptedEvent> OrderAccepted { get; private set; } = null!;
 
     public OrderStateMachine() 
     {
@@ -40,12 +40,12 @@ public class OrderStateMachine : MassTransitStateMachine<OrderState>
                     x.Saga.Items = x.Message.Items;
                     x.Saga.SubmitAt = DateTime.Now;
                 })
+                .Activity(x => x.OfType<OrderSubmittedActivity>())
                 .TransitionTo(Submitted));
         
         During(Submitted,
             Ignore(OrderSubmitted),
             When(OrderAccepted)
-                .Activity(x => x.OfType<OrderAcceptedActivity>())
                 .TransitionTo(Accepted));
     }
 }
