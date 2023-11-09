@@ -3,7 +3,7 @@ using MassTransit;
 
 namespace Ordering.API.EventBusConsumers;
 
-public class FulfilOrderConsumer : IConsumer<FulfillOrder>
+public class FulfillOrderConsumer : IConsumer<FulfillOrder>
 {
     public async Task Consume(ConsumeContext<FulfillOrder> context)
     {
