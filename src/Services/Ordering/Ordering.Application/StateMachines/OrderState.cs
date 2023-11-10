@@ -1,7 +1,7 @@
 using EventBus.Messages.Events;
 using MassTransit;
 
-namespace Ordering.API.StateMachines;
+namespace Ordering.Application.StateMachines;
 
 public class OrderState : SagaStateMachineInstance, ISagaVersion
 {

@@ -2,9 +2,10 @@ using AutoMapper;
 using EventBus.Messages.Events;
 using MassTransit;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Ordering.Application.Features.Orders.Commands.CheckoutOrder;
 
-namespace Ordering.API.EventBusConsumers;
+namespace Ordering.Application.Consumers;
 
 public class BasketCheckoutConsumer : IConsumer<OrderSubmittedEvent>
 {

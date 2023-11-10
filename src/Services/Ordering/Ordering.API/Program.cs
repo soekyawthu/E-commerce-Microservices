@@ -1,9 +1,5 @@
 using Common.Logging;
-using MassTransit;
-using Ordering.API.CourierActivities;
-using Ordering.API.EventBusConsumers;
 using Ordering.API.Extensions;
-using Ordering.API.StateMachines;
 using Ordering.Application;
 using Ordering.Infrastructure;
 using Ordering.Infrastructure.Persistence;
@@ -16,26 +12,6 @@ builder.Host.UseSerilog(SeriLogger.Configure);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddMassTransit(configurator =>
-{
-    configurator.AddConsumer<BasketCheckoutConsumer>();
-    configurator.AddConsumer<FulfillOrderConsumer>();
-    configurator.AddActivitiesFromNamespaceContaining<ReduceInventoryActivity>();
-
-    configurator.AddSagaStateMachine<OrderStateMachine, OrderState>()
-        .MongoDbRepository(r =>
-        {
-            r.Connection = "mongodb://127.0.0.1:27021";
-            r.DatabaseName = "orders";
-        });
-    
-    configurator.UsingRabbitMq((ctx, cfg) =>
-    {
-        cfg.Host(builder.Configuration["EventBusSettings:HostAddress"]);
-        cfg.ConfigureEndpoints(ctx);
-    });
-});
 
 builder.Services.AddAutoMapper(typeof(Program));
 

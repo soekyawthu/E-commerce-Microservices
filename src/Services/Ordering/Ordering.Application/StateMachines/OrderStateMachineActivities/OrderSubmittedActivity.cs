@@ -2,7 +2,7 @@ using EventBus.Messages.Commands;
 using EventBus.Messages.Events;
 using MassTransit;
 
-namespace Ordering.API.StateMachines.OrderStateMachineActivities;
+namespace Ordering.Application.StateMachines.OrderStateMachineActivities;
 
 public class OrderSubmittedActivity : IStateMachineActivity<OrderState, OrderSubmittedEvent>
 {
@@ -21,16 +21,16 @@ public class OrderSubmittedActivity : IStateMachineActivity<OrderState, OrderSub
         Console.WriteLine($"Shopping Card Id is {context.Message.ShoppingCartId}");
         var consumeContext = context.GetPayload<ConsumeContext>();
         var sendEndpoint = await consumeContext.GetSendEndpoint(new Uri("exchange:fulfill-order"));
-        await sendEndpoint.Send<FulfillOrder>(new
+        await sendEndpoint.Send(new FulfillOrder
         {
-            context.Message.ShoppingCartId,
-            context.Saga.UserName,
-            context.Saga.TotalPrice,
-            context.Saga.CardName,
-            context.Saga.CardNumber,
-            context.Saga.Expiration,
-            context.Saga.PaymentMethod,
-            context.Saga.Items
+            ShoppingCartId = context.Message.ShoppingCartId,
+            UserName = context.Saga.UserName,
+            TotalPrice = context.Saga.TotalPrice,
+            CardName = context.Saga.CardName,
+            CardNumber = context.Saga.CardNumber,
+            Expiration = context.Saga.Expiration,
+            PaymentMethod = context.Saga.PaymentMethod,
+            Items = context.Saga.Items
         });
         await next.Execute(context).ConfigureAwait(false);
     }

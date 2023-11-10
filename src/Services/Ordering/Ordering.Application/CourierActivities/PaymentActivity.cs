@@ -1,6 +1,6 @@
 using MassTransit;
 
-namespace Ordering.API.CourierActivities;
+namespace Ordering.Application.CourierActivities;
 
 public class PaymentActivity : IActivity<PaymentArgument, PaymentLog>
 {
@@ -17,6 +17,7 @@ public class PaymentActivity : IActivity<PaymentArgument, PaymentLog>
             throw new InvalidOperationException();
         }
         
+        Console.WriteLine("Complete Payment Activity");
         await Task.Delay(1000);
 
         return context.Completed<PaymentLog>(new { AuthorizationCode = "7777" });
@@ -32,7 +33,7 @@ public class PaymentActivity : IActivity<PaymentArgument, PaymentLog>
 
 public class PaymentArgument
 {
-    public Guid? OrderId { get; set; }
+    public Guid OrderId { get; set; }
     public string? PaymentCardNumber { get; set; }
     public decimal Amount { get; set; }
 }

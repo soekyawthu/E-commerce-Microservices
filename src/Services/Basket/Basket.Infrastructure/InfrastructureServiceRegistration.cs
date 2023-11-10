@@ -29,6 +29,7 @@ public static class InfrastructureServiceRegistration
         
         services.AddMassTransit(configurator =>
         {
+            configurator.SetKebabCaseEndpointNameFormatter();
             configurator.AddMongoDbOutbox(o =>
             {
                 o.DisableInboxCleanupService();

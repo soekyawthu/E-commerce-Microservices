@@ -1,22 +1,29 @@
 using EventBus.Messages.Events;
 using MassTransit;
-using Ordering.API.StateMachines.OrderStateMachineActivities;
+using Ordering.Application.StateMachines;
+using Ordering.Application.StateMachines.OrderStateMachineActivities;
 
 namespace Ordering.API.StateMachines;
 
 public class OrderStateMachine : MassTransitStateMachine<OrderState>
 {
     public State Submitted { get; private set; } = null!;
-    public State Accepted { get; private set; } = null!;
+    public State Completed { get; private set; } = null!;
+    public State Faulted { get; private set; } = null!;
     public Event<OrderSubmittedEvent> OrderSubmitted { get; private set; } = null!;
-    public Event<OrderAcceptedEvent> OrderAccepted { get; private set; } = null!;
+    public Event<OrderFulfilmentCompleted> OrderCompleted { get; private set; } = null!;
+    public Event<OrderFulfilmentFaulted> OrderFaulted { get; private set; } = null!;
+
 
     public OrderStateMachine() 
     {
         Event(() => OrderSubmitted,
             x => x.CorrelateById(context => context.Message.ShoppingCartId));
         
-        Event(() => OrderAccepted,
+        Event(() => OrderCompleted,
+            x => x.CorrelateById(context => context.Message.OrderId));
+        
+        Event(() => OrderFaulted,
             x => x.CorrelateById(context => context.Message.OrderId));
 
         InstanceState(x => x.CurrentState);
@@ -45,7 +52,10 @@ public class OrderStateMachine : MassTransitStateMachine<OrderState>
         
         During(Submitted,
             Ignore(OrderSubmitted),
-            When(OrderAccepted)
-                .TransitionTo(Accepted));
+            When(OrderCompleted)
+                .Then(_ => Console.WriteLine("-> Accepted Order"))
+                .TransitionTo(Completed),
+            When(OrderFaulted)
+                .TransitionTo(Faulted));
     }
 }
