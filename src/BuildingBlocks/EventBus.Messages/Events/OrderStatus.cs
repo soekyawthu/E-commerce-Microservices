@@ -1,10 +1,8 @@
-using MediatR;
+namespace EventBus.Messages.Events;
 
-namespace Ordering.Application.Features.Orders.Commands.UpdateOrder;
-
-public class UpdateOrderCommand : IRequest
+public class OrderStatus
 {
-    public int Id { get; set; }
+    public Guid ShoppingCartId { get; set; }
     public required string UserName { get; set; }
     public decimal TotalPrice { get; set; }
 
@@ -21,6 +19,7 @@ public class UpdateOrderCommand : IRequest
     public required string CardName { get; set; }
     public required string CardNumber { get; set; }
     public required string Expiration { get; set; }
-    public required string CVV { get; set; }
     public int PaymentMethod { get; set; }
+
+    public IEnumerable<Product> Items { get; set; } = new List<Product>();
 }

@@ -1,5 +1,5 @@
+using EventBus.Messages.Commands;
 using MassTransit;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ordering.API.StateMachines;
@@ -10,7 +10,6 @@ using Ordering.Application.CourierActivities;
 using Ordering.Application.Models;
 using Ordering.Application.StateMachines;
 using Ordering.Infrastructure.Mail;
-using Ordering.Infrastructure.Persistence;
 using Ordering.Infrastructure.Repositories;
 
 namespace Ordering.Infrastructure;
@@ -19,12 +18,17 @@ public static class InfrastructureServiceRegistration
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
+        /*
         services.AddDbContext<OrderDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("OrderingConnectionString")));
+            */
         
         services.AddMassTransit(configurator =>
         {
             configurator.SetKebabCaseEndpointNameFormatter();
+            configurator.AddRequestClient<CheckOrder>();
+            configurator.AddRequestClient<UpdateOrder>();
+            configurator.AddRequestClient<DeleteOrder>();
             configurator.AddConsumer<FulfillOrderConsumer>();
             configurator.AddActivitiesFromNamespaceContaining<ReduceInventoryActivity>();
             configurator.AddActivitiesFromNamespaceContaining<PaymentActivity>();
@@ -47,7 +51,7 @@ public static class InfrastructureServiceRegistration
         services.AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>));
         services.AddScoped<IOrderRepository, OrderRepository>();
 
-        services.Configure<EmailSettings>(c => configuration.GetSection("EmailSettings"));
+        services.Configure<EmailSettings>(_ => configuration.GetSection("EmailSettings"));
         services.AddTransient<IEmailService, EmailService>();
         services.AddFluentEmail(string.Empty, string.Empty);
         return services;

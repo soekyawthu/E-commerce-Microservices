@@ -1,10 +1,7 @@
-using System.Net;
-using MediatR;
+using EventBus.Messages.Commands;
+using EventBus.Messages.Events;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
-using Ordering.Application.Features.Orders.Commands.CheckoutOrder;
-using Ordering.Application.Features.Orders.Commands.DeleteOrder;
-using Ordering.Application.Features.Orders.Commands.UpdateOrder;
-using Ordering.Application.Features.Orders.Queries.GetOrderList;
 
 namespace Ordering.API.Controllers;
 
@@ -13,50 +10,61 @@ namespace Ordering.API.Controllers;
 public class OrderController : ControllerBase
 {
     private readonly ILogger<OrderController> _logger;
-    private readonly IMediator _mediator;
+    private readonly IRequestClient<DeleteOrder> _deleteOrderRequestClient;
+    private readonly IRequestClient<UpdateOrder> _updateOrderRequestClient;
+    private readonly IRequestClient<CheckOrder> _checkOrderRequestClient;
 
-    public OrderController(ILogger<OrderController> logger, IMediator mediator)
+    public OrderController(
+        ILogger<OrderController> logger, 
+        IRequestClient<DeleteOrder> deleteOrderRequestClient,
+        IRequestClient<UpdateOrder> updateOrderRequestClient,
+        IRequestClient<CheckOrder> checkOrderRequestClient)
     {
         _logger = logger;
-        _mediator = mediator;
+        _deleteOrderRequestClient = deleteOrderRequestClient;
+        _updateOrderRequestClient = updateOrderRequestClient;
+        _checkOrderRequestClient = checkOrderRequestClient;
     }
     
     [HttpGet("{userName}", Name = "GetOrder")]
-    [ProducesResponseType(typeof(IEnumerable<OrderViewModel>), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<IEnumerable<OrderViewModel>>> GetOrdersByUserName(string userName)
+    public async Task<ActionResult> GetOrdersByUserName(string userName)
     {
-        var query = new GetOrderListQuery(userName);
-        var orders = await _mediator.Send(query);
-        return Ok(orders);
+        var (accepted, rejected) = await _checkOrderRequestClient
+            .GetResponse<OrderStatus, OrderNotFound>(new CheckOrder{ Username = userName });
+        
+        if (accepted.IsCompletedSuccessfully)
+            return Ok(accepted.Result.Message);
+        
+        return BadRequest(rejected.Result.Message);
     }
-
-    // testing purpose
-    [HttpPost(Name = "CheckoutOrder")]
-    [ProducesResponseType((int)HttpStatusCode.OK)]
-    public async Task<ActionResult<int>> CheckoutOrder([FromBody] CheckoutOrderCommand command)
-    {
-        var result = await _mediator.Send(command);
-        return Ok(result);
-    }
-
+    
     [HttpPut(Name = "UpdateOrder")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult> UpdateOrder([FromBody] UpdateOrderCommand command)
+    public async Task<ActionResult> UpdateOrder([FromBody] UpdateOrder order)
     {
-        await _mediator.Send(command);
-        return NoContent();
+        var (accepted, rejected) = await _updateOrderRequestClient
+            .GetResponse<UpdateOrderAccepted, UpdateOrderRejected>(order);
+        
+        if (accepted.IsCompletedSuccessfully)
+            return NoContent();
+        
+        return BadRequest(rejected.Result.Message);
     }
 
-    [HttpDelete("{id:int}", Name = "DeleteOrder")]
+    [HttpDelete("{id:guid}", Name = "DeleteOrder")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult> DeleteOrder(int id)
+    public async Task<ActionResult> DeleteOrder(Guid id)
     {
-        var command = new DeleteOrderCommand(id);
-        await _mediator.Send(command);
-        return NoContent();
+        var (accepted, rejected) = await _deleteOrderRequestClient
+            .GetResponse<DeleteOrderAccepted, DeleteOrderRejected>(new DeleteOrder { OrderId = id });
+
+        if (accepted.IsCompletedSuccessfully)
+            return NoContent();
+        
+        return BadRequest(rejected.Result.Message);
     }
 }
