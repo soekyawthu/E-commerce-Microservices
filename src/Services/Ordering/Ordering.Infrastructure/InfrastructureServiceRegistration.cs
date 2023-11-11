@@ -2,7 +2,6 @@ using EventBus.Messages.Commands;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Ordering.API.StateMachines;
 using Ordering.Application.Consumers;
 using Ordering.Application.Contracts.Infrastructure;
 using Ordering.Application.Contracts.Persistence;

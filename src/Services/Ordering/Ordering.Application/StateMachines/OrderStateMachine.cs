@@ -1,9 +1,9 @@
+using EventBus.Messages.Commands;
 using EventBus.Messages.Events;
 using MassTransit;
-using Ordering.Application.StateMachines;
 using Ordering.Application.StateMachines.OrderStateMachineActivities;
 
-namespace Ordering.API.StateMachines;
+namespace Ordering.Application.StateMachines;
 
 public class OrderStateMachine : MassTransitStateMachine<OrderState>
 {
@@ -13,8 +13,8 @@ public class OrderStateMachine : MassTransitStateMachine<OrderState>
     public Event<OrderSubmittedEvent> OrderSubmitted { get; private set; } = null!;
     public Event<OrderFulfilmentCompleted> OrderCompleted { get; private set; } = null!;
     public Event<OrderFulfilmentFaulted> OrderFaulted { get; private set; } = null!;
-
-
+    public Event<CheckOrder>? CheckOrderRequest { get; private set; } = null!;
+  
     public OrderStateMachine() 
     {
         Event(() => OrderSubmitted,
@@ -24,6 +24,9 @@ public class OrderStateMachine : MassTransitStateMachine<OrderState>
             x => x.CorrelateById(context => context.Message.OrderId));
         
         Event(() => OrderFaulted,
+            x => x.CorrelateById(context => context.Message.OrderId));
+
+        Event(() => CheckOrderRequest,
             x => x.CorrelateById(context => context.Message.OrderId));
 
         InstanceState(x => x.CurrentState);
@@ -49,7 +52,7 @@ public class OrderStateMachine : MassTransitStateMachine<OrderState>
                 })
                 .Activity(x => x.OfType<OrderSubmittedActivity>())
                 .TransitionTo(Submitted));
-        
+
         During(Submitted,
             Ignore(OrderSubmitted),
             When(OrderCompleted)
@@ -57,5 +60,13 @@ public class OrderStateMachine : MassTransitStateMachine<OrderState>
                 .TransitionTo(Completed),
             When(OrderFaulted)
                 .TransitionTo(Faulted));
+        
+        DuringAny(
+            When(CheckOrderRequest)
+                .RespondAsync(x => x.Init<OrderStatus>(new OrderStatus()
+                {
+                    OrderId = x.Saga.CorrelationId,
+                    Status = x.Saga.CurrentState
+                })));
     }
 }

@@ -1,15 +1,26 @@
+using MassTransit;
+using Payment.API.Consumers;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddMassTransit(configurator =>
+{
+    configurator.SetKebabCaseEndpointNameFormatter();
+    configurator.AddConsumer<PaymentConsumer>();
+   
+    configurator.UsingRabbitMq((ctx, cfg) =>
+    {
+        cfg.Host(builder.Configuration["EventBusSettings:HostAddress"]);
+        cfg.ConfigureEndpoints(ctx);
+    });
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

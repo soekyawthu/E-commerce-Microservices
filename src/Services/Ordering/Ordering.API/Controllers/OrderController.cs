@@ -29,8 +29,15 @@ public class OrderController : ControllerBase
     [HttpGet("{userName}", Name = "GetOrder")]
     public async Task<ActionResult> GetOrdersByUserName(string userName)
     {
+        return BadRequest();
+    }
+    
+    [HttpGet("{orderId}", Name = "GetOrder")]
+    [Route("[action]")]
+    public async Task<ActionResult> CheckOrder(Guid orderId)
+    {
         var (accepted, rejected) = await _checkOrderRequestClient
-            .GetResponse<OrderStatus, OrderNotFound>(new CheckOrder{ Username = userName });
+            .GetResponse<OrderStatus, OrderNotFound>(new CheckOrder{ OrderId = orderId });
         
         if (accepted.IsCompletedSuccessfully)
             return Ok(accepted.Result.Message);
