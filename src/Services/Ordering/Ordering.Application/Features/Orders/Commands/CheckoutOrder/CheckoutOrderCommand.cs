@@ -1,8 +1,8 @@
-using Ordering.Domain.Common;
+using MediatR;
 
-namespace Ordering.Domain.Entities;
+namespace Ordering.Application.Features.Orders.Commands.CheckoutOrder;
 
-public class Order : EntityBase
+public class CheckoutOrderCommand : IRequest<Guid>
 {
     public required string UserName { get; set; }
     public decimal TotalPrice { get; set; }
@@ -20,7 +20,6 @@ public class Order : EntityBase
     public required string CardName { get; set; }
     public required string CardNumber { get; set; }
     public required string Expiration { get; set; }
+    public required string CVV { get; set; }
     public int PaymentMethod { get; set; }
-
-    public IEnumerable<Product> Products { get; set; } = new List<Product>();
 }

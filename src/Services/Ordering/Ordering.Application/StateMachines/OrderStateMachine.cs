@@ -14,7 +14,7 @@ public class OrderStateMachine : MassTransitStateMachine<OrderState>
     public Event<OrderFulfilmentCompleted> OrderCompleted { get; private set; } = null!;
     public Event<OrderFulfilmentFaulted> OrderFaulted { get; private set; } = null!;
     public Event<CheckOrder>? CheckOrderRequest { get; private set; } = null!;
-  
+    
     public OrderStateMachine() 
     {
         Event(() => OrderSubmitted,

@@ -5,7 +5,7 @@ using Ordering.Infrastructure.Persistence;
 
 namespace Ordering.Infrastructure.Repositories;
 
-public class OrderRepository : RepositoryBase<Order> , IOrderRepository
+public class OrderRepository : RepositoryBase<Order>
 {
 
     public OrderRepository(OrderDbContext context) : base(context)

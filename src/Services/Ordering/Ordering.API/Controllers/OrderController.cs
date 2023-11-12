@@ -1,7 +1,10 @@
 using EventBus.Messages.Commands;
 using EventBus.Messages.Events;
 using MassTransit;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Ordering.Application.Features.Orders.Commands.DeleteOrder;
+using Ordering.Application.Features.Orders.Queries.GetOrderList;
 
 namespace Ordering.API.Controllers;
 
@@ -10,26 +13,27 @@ namespace Ordering.API.Controllers;
 public class OrderController : ControllerBase
 {
     private readonly ILogger<OrderController> _logger;
-    private readonly IRequestClient<DeleteOrder> _deleteOrderRequestClient;
     private readonly IRequestClient<UpdateOrder> _updateOrderRequestClient;
     private readonly IRequestClient<CheckOrder> _checkOrderRequestClient;
+    private readonly IMediator _mediator;
 
     public OrderController(
         ILogger<OrderController> logger, 
-        IRequestClient<DeleteOrder> deleteOrderRequestClient,
         IRequestClient<UpdateOrder> updateOrderRequestClient,
-        IRequestClient<CheckOrder> checkOrderRequestClient)
+        IRequestClient<CheckOrder> checkOrderRequestClient,
+        IMediator mediator)
     {
         _logger = logger;
-        _deleteOrderRequestClient = deleteOrderRequestClient;
         _updateOrderRequestClient = updateOrderRequestClient;
         _checkOrderRequestClient = checkOrderRequestClient;
+        _mediator = mediator;
     }
     
     [HttpGet("{userName}", Name = "GetOrder")]
     public async Task<ActionResult> GetOrdersByUserName(string userName)
     {
-        return BadRequest();
+        var result = await _mediator.Send(new GetOrderListQuery(userName));
+        return Ok(result);
     }
     
     [HttpGet("{orderId}", Name = "GetOrder")]
@@ -66,12 +70,7 @@ public class OrderController : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult> DeleteOrder(Guid id)
     {
-        var (accepted, rejected) = await _deleteOrderRequestClient
-            .GetResponse<DeleteOrderAccepted, DeleteOrderRejected>(new DeleteOrder { OrderId = id });
-
-        if (accepted.IsCompletedSuccessfully)
-            return NoContent();
-        
-        return BadRequest(rejected.Result.Message);
+        await _mediator.Send(new DeleteOrderCommand(id));
+        return NoContent();
     }
 }
