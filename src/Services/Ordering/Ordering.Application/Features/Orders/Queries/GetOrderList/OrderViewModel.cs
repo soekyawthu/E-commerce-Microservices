@@ -1,8 +1,10 @@
+using Ordering.Domain.Entities;
+
 namespace Ordering.Application.Features.Orders.Queries.GetOrderList;
 
 public class OrderViewModel
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public required string UserName { get; set; }
     public decimal TotalPrice { get; set; }
 
@@ -19,6 +21,7 @@ public class OrderViewModel
     public required string CardName { get; set; }
     public required string CardNumber { get; set; }
     public required string Expiration { get; set; }
-    public required string CVV { get; set; }
     public int PaymentMethod { get; set; }
+
+    public IEnumerable<Product> Items { get; set; } = new List<Product>();
 }

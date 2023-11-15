@@ -29,17 +29,17 @@ public class FulfillOrderConsumer : IConsumer<FulfillOrder>
         await builder.AddSubscription(context.SourceAddress!, 
             RoutingSlipEvents.Faulted | RoutingSlipEvents.Supplemental, 
             RoutingSlipEventContents.None,
-            endpoint => endpoint.Send<OrderFulfilmentFaulted>(new
+            endpoint => endpoint.Send<OrderFulfilmentFaulted>(new OrderFulfilmentFaulted
             {
-                context.Message.ShoppingCartId,
+                OrderId = context.Message.ShoppingCartId,
             }));
         
         await builder.AddSubscription(context.SourceAddress!, 
             RoutingSlipEvents.Completed | RoutingSlipEvents.Supplemental, 
             RoutingSlipEventContents.None,
-            endpoint => endpoint.Send<OrderFulfilmentCompleted>(new
+            endpoint => endpoint.Send<OrderFulfilmentCompleted>(new OrderFulfilmentCompleted
             {
-                context.Message.ShoppingCartId,
+                OrderId = context.Message.ShoppingCartId,
             }));
         
         var routingSlip = builder.Build();

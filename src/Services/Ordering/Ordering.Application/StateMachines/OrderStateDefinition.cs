@@ -14,6 +14,6 @@ public class OrderStateDefinition : SagaDefinition<OrderState>
         IRegistrationContext context)
     {
         endpointConfigurator.UseMessageRetry(x => x.Intervals(1000, 5000, 10000));
-        endpointConfigurator.UseMongoDbOutbox(context);
+        //endpointConfigurator.UseMongoDbOutbox(context);
     }
 }

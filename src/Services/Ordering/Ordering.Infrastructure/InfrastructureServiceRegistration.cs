@@ -9,6 +9,7 @@ using Ordering.Application.CourierActivities;
 using Ordering.Application.Models;
 using Ordering.Application.StateMachines;
 using Ordering.Infrastructure.Mail;
+using Ordering.Infrastructure.Persistence.Mongo;
 using Ordering.Infrastructure.Repositories;
 
 namespace Ordering.Infrastructure;
@@ -46,8 +47,7 @@ public static class InfrastructureServiceRegistration
             });
         });
 
-
-        services.AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>));
+        services.AddScoped<IOrderDbContext, OrderDbContext>();
         services.AddScoped<IOrderRepository, OrderMongoRepository>();
 
         services.Configure<EmailSettings>(_ => configuration.GetSection("EmailSettings"));

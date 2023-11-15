@@ -26,7 +26,7 @@ public class OrderSubmittedEvent : MessageBase
 
 public class Product
 {
-    public required string ProductId { get; set; }
+    public required Guid ProductId { get; set; }
     public required string ProductName { get; set; }
     public required string Color { get; set; }
     public decimal Price { get; set; }

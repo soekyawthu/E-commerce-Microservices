@@ -1,8 +1,6 @@
 using Common.Logging;
-using Ordering.API.Extensions;
 using Ordering.Application;
 using Ordering.Infrastructure;
-using Ordering.Infrastructure.Persistence;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,12 +17,6 @@ builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
 var app = builder.Build();
-
-app.MigrateDatabase<OrderDbContext>((context, provider) =>
-{
-    var logger = provider.GetService<ILogger<OrderSeed>>();
-    OrderSeed.SeedAsync(logger, context).Wait();
-});
 
 if (app.Environment.IsDevelopment())
 {

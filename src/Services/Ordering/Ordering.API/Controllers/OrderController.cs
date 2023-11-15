@@ -36,8 +36,7 @@ public class OrderController : ControllerBase
         return Ok(result);
     }
     
-    [HttpGet("{orderId}", Name = "GetOrder")]
-    [Route("[action]")]
+    [HttpGet("[action]/{orderId:guid}")]
     public async Task<ActionResult> CheckOrder(Guid orderId)
     {
         var (accepted, rejected) = await _checkOrderRequestClient
@@ -50,8 +49,6 @@ public class OrderController : ControllerBase
     }
     
     [HttpPut(Name = "UpdateOrder")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesDefaultResponseType]
     public async Task<ActionResult> UpdateOrder([FromBody] UpdateOrder order)
     {
@@ -65,9 +62,6 @@ public class OrderController : ControllerBase
     }
 
     [HttpDelete("{id:guid}", Name = "DeleteOrder")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesDefaultResponseType]
     public async Task<ActionResult> DeleteOrder(Guid id)
     {
         await _mediator.Send(new DeleteOrderCommand(id));

@@ -22,5 +22,5 @@ public class Order : EntityBase
     public required string Expiration { get; set; }
     public int PaymentMethod { get; set; }
 
-    public IEnumerable<Product> Products { get; set; } = new List<Product>();
+    public IEnumerable<Product> Items { get; set; } = new List<Product>();
 }
