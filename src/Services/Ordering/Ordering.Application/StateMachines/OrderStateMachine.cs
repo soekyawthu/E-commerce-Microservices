@@ -1,9 +1,7 @@
 using EventBus.Messages.Commands;
 using EventBus.Messages.Events;
 using MassTransit;
-using Ordering.Application.Contracts.Persistence;
 using Ordering.Application.StateMachines.OrderStateMachineActivities;
-using Ordering.Domain.Entities;
 
 namespace Ordering.Application.StateMachines;
 
@@ -38,17 +36,8 @@ public class OrderStateMachine : MassTransitStateMachine<OrderState>
                 .Then(x =>
                 {
                     x.Saga.UserName = x.Message.UserName;
-                    x.Saga.FirstName = x.Message.FirstName;
-                    x.Saga.LastName = x.Message.LastName;
-                    x.Saga.EmailAddress = x.Message.LastName;
-                    x.Saga.AddressLine = x.Message.AddressLine;
-                    x.Saga.Country = x.Message.Country;
-                    x.Saga.State = x.Message.State;
-                    x.Saga.ZipCode = x.Message.ZipCode;
-                    x.Saga.CardName = x.Message.CardName;
-                    x.Saga.CardNumber = x.Message.CardNumber;
-                    x.Saga.Expiration = x.Message.Expiration;
-                    x.Saga.PaymentMethod = x.Message.PaymentMethod;
+                    x.Saga.PaymentCard = x.Message.PaymentCard;
+                    x.Saga.ShippingAddress = x.Message.ShippingAddress;
                     x.Saga.Items = x.Message.Items;
                     x.Saga.SubmitAt = DateTime.Now;
                 })

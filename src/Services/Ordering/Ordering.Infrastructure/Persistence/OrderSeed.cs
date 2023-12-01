@@ -13,17 +13,24 @@ public class OrderSeed
             new()
             {
                 UserName = "skt",
-                FirstName = "Soe Kyaw",
-                LastName = "Thu",
-                EmailAddress = "soekyawthu.dev@gmail.com",
-                AddressLine = "Yangon",
-                Country = "Myanmar",
-                TotalPrice = 350,
-                State = string.Empty,
-                ZipCode = string.Empty,
-                CardName = string.Empty,
-                CardNumber = string.Empty,
-                Expiration = string.Empty,
+                ShippingAddress = new ShippingAddress
+                    {
+                        FullName = "Soe Kyaw Thu",
+                        Email = "soekyawthu.dev@gmail.com",
+                        AddressLine = "Pale",
+                        Country = "Myanmar",
+                        State = "Sagaing",
+                        City = "Pale",
+                        ZipCode = 111
+                    },
+                PaymentCard = new Card
+                {
+                    Name = "Soe Kyaw Thu",
+                    Number = "422 422 422 422",
+                    Expiration = DateTime.Now,
+                    Cvv = "abc"
+                },
+                TotalPrice = 350
             }
         };
     }

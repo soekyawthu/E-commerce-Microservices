@@ -11,7 +11,7 @@ public class FulfillOrder
     // Payment
     public required string CardName { get; set; }
     public required string CardNumber { get; set; }
-    public required string Expiration { get; set; }
+    public required DateTime Expiration { get; set; }
     public int PaymentMethod { get; set; }
 
     public IEnumerable<Product> Items { get; set; } = new List<Product>();

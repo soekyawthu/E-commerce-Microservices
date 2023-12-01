@@ -7,23 +7,29 @@ public class CheckoutBasketCommand : IRequest<bool>
     public Guid ShoppingCartId { get; set; }
     public required string UserName { get; set; }
     public decimal TotalPrice { get; set; }
+    
+    public required ShippingAddress ShippingAddress { get; set; }
+    public required Card PaymentCard { get; set; }
+}
 
-    // BillingAddress
-    public string? FirstName { get; set; }
-    public string? LastName { get; set; }
-    public string? EmailAddress { get; set; }
-    public string? AddressLine { get; set; }
-    public string? Country { get; set; }
-    public string? State { get; set; }
-    public string? ZipCode { get; set; }
 
-    // Payment
-    public string? CardName { get; set; }
-    public string? CardNumber { get; set; }
-    public string? Expiration { get; set; }
-    public int PaymentMethod { get; set; }
+public class ShippingAddress
+{
+    public required string FullName { get; set; }
+    public required string Email { get; set; }
+    public required string AddressLine { get; set; }
+    public required string Country { get; set; }
+    public required string State { get; set; }
+    public required string City { get; set; }
+    public required int ZipCode { get; set; }
+}
 
-    public IEnumerable<Product> Items { get; set; } = new List<Product>();
+public class Card
+{
+    public required string Name { get; set; }
+    public required string Number { get; set; }
+    public required DateTime Expiration { get; set; }
+    public required string Cvv { get; set; }
 }
 
 public class Product

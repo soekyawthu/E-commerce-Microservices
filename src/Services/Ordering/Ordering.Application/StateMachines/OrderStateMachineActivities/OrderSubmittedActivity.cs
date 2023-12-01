@@ -3,6 +3,9 @@ using EventBus.Messages.Events;
 using MassTransit;
 using Ordering.Application.Contracts.Persistence;
 using Ordering.Domain.Entities;
+using Card = Ordering.Domain.Entities.Card;
+using Product = Ordering.Domain.Entities.Product;
+using ShippingAddress = Ordering.Domain.Entities.ShippingAddress;
 
 namespace Ordering.Application.StateMachines.OrderStateMachineActivities;
 
@@ -33,24 +36,31 @@ public class OrderSubmittedActivity : IStateMachineActivity<OrderState, OrderSub
         {
             Id = context.Message.ShoppingCartId,
             UserName = context.Message.UserName,
-            FirstName = context.Message.FirstName,
-            LastName = context.Message.LastName,
-            EmailAddress = context.Message.LastName,
-            AddressLine = context.Message.AddressLine,
-            Country = context.Message.Country,
-            State = context.Message.State,
-            ZipCode = context.Message.ZipCode,
-            CardName = context.Message.CardName,
-            CardNumber = context.Message.CardNumber,
-            Expiration = context.Message.Expiration,
-            Items = context.Message.Items.Select(product => new Ordering.Domain.Entities.Product
+            Items = context.Message.Items.Select(product => new Product
             {
                 Id = product.ProductId,
                 Name = product.ProductName,
                 Color = product.Color,
                 Price = product.Price,
                 Quantity = product.Quantity,
-            })
+            }),
+            ShippingAddress = new ShippingAddress
+            {
+                FullName = context.Message.ShippingAddress.FullName,
+                Email = context.Message.ShippingAddress.Email,
+                AddressLine = context.Message.ShippingAddress.AddressLine,
+                Country = context.Message.ShippingAddress.Country,
+                State = context.Message.ShippingAddress.State,
+                City = context.Message.ShippingAddress.City,
+                ZipCode = context.Message.ShippingAddress.ZipCode
+            },
+            PaymentCard = new Card
+            {
+                Name = context.Message.PaymentCard.Name,
+                Number = context.Message.PaymentCard.Number,
+                Expiration = context.Message.PaymentCard.Expiration,
+                Cvv = context.Message.PaymentCard.Cvv
+            }
         });
         
         var consumeContext = context.GetPayload<ConsumeContext>();
@@ -60,10 +70,9 @@ public class OrderSubmittedActivity : IStateMachineActivity<OrderState, OrderSub
             ShoppingCartId = context.Message.ShoppingCartId,
             UserName = context.Saga.UserName,
             TotalPrice = context.Saga.TotalPrice,
-            CardName = context.Saga.CardName,
-            CardNumber = context.Saga.CardNumber,
-            Expiration = context.Saga.Expiration,
-            PaymentMethod = context.Saga.PaymentMethod,
+            CardName = context.Saga.PaymentCard.Name,
+            CardNumber = context.Saga.PaymentCard.Number,
+            Expiration = context.Saga.PaymentCard.Expiration,
             Items = context.Saga.Items
         });
         await next.Execute(context).ConfigureAwait(false);

@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using Common.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Ordering.Application;
 using Ordering.Infrastructure;
 using Serilog;
@@ -10,6 +12,19 @@ builder.Host.UseSerilog(SeriLogger.Configure);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAuthentication("Bearer")
+    .AddCookie()
+    .AddJwtBearer(options =>
+    {
+        options.Authority = "https://localhost:6001";
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateAudience = false,
+            NameClaimType = ClaimTypes.Name,
+            RoleClaimType = ClaimTypes.Role,
+        };
+    });
 
 builder.Services.AddAutoMapper(typeof(Program));
 
