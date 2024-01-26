@@ -27,6 +27,7 @@ public class CheckoutBasketCommandHandler : IRequestHandler<CheckoutBasketComman
         
         var basket = _mapper.Map<BasketCheckout>(request);
         basket.Items = cart.Items;
+        basket.TotalPrice = basket.Items.Sum(x => x.Price * x.Quantity);
         return await _checkoutService.Checkout(basket);
     }
 }

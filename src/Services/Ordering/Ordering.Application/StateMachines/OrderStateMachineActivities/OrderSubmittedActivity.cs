@@ -36,6 +36,8 @@ public class OrderSubmittedActivity : IStateMachineActivity<OrderState, OrderSub
         {
             Id = context.Message.ShoppingCartId,
             UserName = context.Message.UserName,
+            TotalPrice = context.Message.TotalPrice,
+            CreatedDate = context.Message.CreationDate,
             Items = context.Message.Items.Select(product => new Product
             {
                 Id = product.ProductId,

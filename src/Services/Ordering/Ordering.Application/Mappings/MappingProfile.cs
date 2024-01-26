@@ -10,7 +10,8 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Order, OrderViewModel>().ReverseMap();
+        CreateMap<Order, OrderViewModel>().ReverseMap()
+            .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => src.OrderDate));
         CreateMap<Order, CheckoutOrderCommand>().ReverseMap();
         CreateMap<Order, UpdateOrderCommand>().ReverseMap();
     }

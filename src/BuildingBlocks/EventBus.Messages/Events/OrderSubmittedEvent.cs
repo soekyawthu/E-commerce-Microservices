@@ -5,7 +5,6 @@ public class OrderSubmittedEvent : MessageBase
     public Guid ShoppingCartId { get; set; }
     public required string UserName { get; set; }
     public decimal TotalPrice { get; set; }
-
     public required ShippingAddress ShippingAddress { get; set; }
     public required Card PaymentCard { get; set; }
 

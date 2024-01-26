@@ -27,7 +27,16 @@ public class OrderStateMachine : MassTransitStateMachine<OrderState>
             x => x.CorrelateById(context => context.Message.OrderId));
 
         Event(() => CheckOrderRequest,
-            x => x.CorrelateById(context => context.Message.OrderId));
+            x =>
+            {
+                x.CorrelateById(context => context.Message.OrderId);
+                x.OnMissingInstance(b =>
+                    b.ExecuteAsync(context => context.RespondAsync(new OrderNotFound
+                    {
+                        OrderId = context.Message.OrderId,
+                        Reason = "Order Id may be incorrect!"
+                    })));
+            });
 
         InstanceState(x => x.CurrentState);
         
@@ -36,6 +45,7 @@ public class OrderStateMachine : MassTransitStateMachine<OrderState>
                 .Then(x =>
                 {
                     x.Saga.UserName = x.Message.UserName;
+                    x.Saga.TotalPrice = x.Message.TotalPrice;
                     x.Saga.PaymentCard = x.Message.PaymentCard;
                     x.Saga.ShippingAddress = x.Message.ShippingAddress;
                     x.Saga.Items = x.Message.Items;
@@ -57,7 +67,13 @@ public class OrderStateMachine : MassTransitStateMachine<OrderState>
                 .RespondAsync(x => x.Init<OrderStatus>(new OrderStatus()
                 {
                     OrderId = x.Saga.CorrelationId,
-                    Status = x.Saga.CurrentState
+                    Status = x.Saga.CurrentState,
+                    UserName = x.Saga.UserName,
+                    TotalPrice = x.Saga.TotalPrice,
+                    OrderDate = x.Saga.SubmitAt,
+                    ShippingAddress = x.Saga.ShippingAddress,
+                    PaymentCard = x.Saga.PaymentCard,
+                    Items = x.Saga.Items
                 })));
     }
 }

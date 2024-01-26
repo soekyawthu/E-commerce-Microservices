@@ -1,5 +1,6 @@
 using System.Net;
 using Catalog.API.Entities;
+using Catalog.API.Models;
 using Catalog.API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,10 +27,10 @@ public class CatalogController : ControllerBase
         return Ok(products);
     }
 
-    [HttpGet("{id:length(24)}", Name = "GetProduct")]
+    [HttpGet("{id:guid}", Name = "GetProduct")]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<Product>> GetProductById(string id)
+    public async Task<ActionResult<Product>> GetProductById(Guid id)
     {
         var product = await _repository.GetProduct(id);
         if (product is not null) return Ok(product);
@@ -37,7 +38,7 @@ public class CatalogController : ControllerBase
         _logger.LogError("Product with id: {Id}, not found", id);
         return NotFound();
     }
-        
+    
     [Route("[action]/{name}", Name = "GetProductByName")]
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
@@ -58,10 +59,10 @@ public class CatalogController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<Product>> CreateProduct([FromBody] Product product)
+    public async Task<ActionResult<ProductViewModel>> CreateProduct([FromForm] Product product)
     {
+        if (product.ImageFile is not { Length: > 0 }) return BadRequest();
         await _repository.CreateProduct(product);
-        
         return CreatedAtRoute("GetProduct", new { id = product.Id }, product);
     }
 
@@ -72,10 +73,10 @@ public class CatalogController : ControllerBase
         return Ok(await _repository.UpdateProduct(product));
     }
 
-    [HttpDelete("{id:length(24)}", Name = "DeleteProduct")]
+    [HttpDelete("{id:guid}", Name = "DeleteProduct")]
     [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> DeleteProductById(string id)
+    public async Task<IActionResult> DeleteProductById(Guid id)
     {
-        return Ok(await _repository.DeleteProduct(id));
+        return await _repository.DeleteProduct(id) ? NoContent() : BadRequest();
     }
 }

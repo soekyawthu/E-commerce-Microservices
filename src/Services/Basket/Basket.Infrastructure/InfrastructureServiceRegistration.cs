@@ -17,7 +17,7 @@ public static class InfrastructureServiceRegistration
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration config)
     {
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
-        var connectionString = config.GetConnectionString("Default");
+        var connectionString = config["DatabaseSettings:ConnectionString"];//config.GetConnectionString("Default");
         const string databaseName = "ShoppingCart";
 
         services.AddSingleton<IMongoClient>(_ => new MongoClient(connectionString));

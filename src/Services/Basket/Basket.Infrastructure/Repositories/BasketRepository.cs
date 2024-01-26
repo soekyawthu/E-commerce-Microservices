@@ -31,10 +31,14 @@ public class BasketRepository : IBasketRepository
         await _dbContext.BeginTransaction(cancellationTokenSource.Token);
 
         if (shoppingCart is not null)
+        {
             await _shoppingCarts.ReplaceOneAsync(_dbContext.Session, filter, basket, cancellationToken: cancellationTokenSource.Token);
-
-        await _shoppingCarts.InsertOneAsync(_dbContext.Session, basket,
-            cancellationToken: cancellationTokenSource.Token);
+        }
+        else
+        {
+            await _shoppingCarts.InsertOneAsync(_dbContext.Session, basket,
+                cancellationToken: cancellationTokenSource.Token);
+        }
         
         try
         {

@@ -23,6 +23,8 @@ public class CheckoutService : ICheckoutService
     public async Task<bool> Checkout(BasketCheckout checkout)
     {
         var checkedOutEvent = _mapper.Map<OrderSubmittedEvent>(checkout);
+        Console.WriteLine($"Total Price of Checkout => {checkout.TotalPrice}");
+        Console.WriteLine($"Total Price of CheckoutEvent => {checkedOutEvent.TotalPrice}");
         await _publishEndpoint.Publish(checkedOutEvent);
         await _repository.DeleteBasket(checkout.UserName);
         return true;

@@ -1,29 +1,32 @@
-version: '3.4'
+version: '3.8'
 
 services:
-  catalogdb:
+  mongo1:
     image: mongo
     
-  basketdb:
-    image: redis
-  
+  mongo2:
+    image: mongo
+    
+  mongo3:
+    image: mongo
+    
   discountdb:
     image: postgres
     
-  orderdb:
-    image: mcr.microsoft.com/mssql/server
+  #orderdb:
+    #image: mcr.microsoft.com/mssql/server
     
   rabbitmq:
     image: rabbitmq:3-management
   
-  portainer:
-    image: portainer/portainer-ce
+  #portainer:
+    #image: portainer/portainer-ce
     
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2
+  #elasticsearch:
+    #image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2
     
-  kibana:
-    image: docker.elastic.co/kibana/kibana:7.9.2
+  #kibana:
+    #image: docker.elastic.co/kibana/kibana:7.9.2
   
   catalog.api:
     image: ${DOCKER_REGISTRY-}catalogapi
@@ -55,23 +58,29 @@ services:
       context: .
       dockerfile: Services/Ordering/Ordering.API/Dockerfile
       
-  ocelotapigateway:
-    image: ${DOCKER_REGISTRY-}ocelotapigateway
+  inventory.api:
+    image: ${DOCKER_REGISTRY-}inventoryapi
     build:
       context: .
-      dockerfile: ApiGateways/OcelotApiGateway/Dockerfile
+      dockerfile: Services/Inventory/Inventory.API/Dockerfile
+      
+  payment.api:
+    image: ${DOCKER_REGISTRY-}paymentapi
+    build:
+      context: .
+      dockerfile: Services/Payment/Payment.API/Dockerfile
+      
+  bff.web:
+    image: ${DOCKER_REGISTRY-}bff
+    build:
+      context: .
+      dockerfile: ApiGateways/BFF.Web/BFF.Web/Dockerfile
       
   shopping.aggregator:
     image: ${DOCKER_REGISTRY-}shoppingaggregator
     build:
       context: .
       dockerfile: ApiGateways/Shopping.Aggregator/Dockerfile
-      
-  webapp.traditional:
-    image: ${DOCKER_REGISTRY-}traditionalwebapp
-    build:
-      context: .
-      dockerfile: WebApps/TraditionalWebApp/Dockerfile
 
 volumes:
   mongo_data:

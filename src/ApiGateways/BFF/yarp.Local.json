@@ -1,0 +1,124 @@
+{
+  "ReverseProxy": {
+    "Routes": {
+      "catalog-route": {
+        "ClusterId": "catalog-cluster",
+        "Match": {
+          "Path": "/catalog/{**catch-all}"
+        },
+        "Metadata": {
+          "Duende.Bff.Yarp.TokenType": "User"
+        },
+        "Transforms": [ { "PathPattern": "{**catch-all}" } ]
+      },
+      "basket-route": {
+        "ClusterId": "basket-cluster",
+        "Match": {
+          "Path": "/basket/{**catch-all}"
+        },
+        "Metadata": {
+          "Duende.Bff.Yarp.TokenType": "User"
+        },
+        "Transforms": [ { "PathPattern": "{**catch-all}" } ]
+      },
+      "discount-route": {
+        "ClusterId": "discount-cluster",
+        "Match": {
+          "Path": "/discount/{**catch-all}"
+        },
+        "Metadata": {
+          "Duende.Bff.Yarp.TokenType": "User"
+        },
+        "Transforms": [ { "PathPattern": "{**catch-all}" } ]
+      },
+      "order-route": {
+        "ClusterId": "order-cluster",
+        "Match": {
+          "Path": "/order/{**catch-all}"
+        },
+        "Metadata": {
+          "Duende.Bff.Yarp.TokenType": "User"
+        },
+        "Transforms": [ { "PathPattern": "{**catch-all}" } ]
+      },
+      "aggregator-route": {
+        "ClusterId": "aggregator-cluster",
+        "Match": {
+          "Path": "/shopping/{**catch-all}"
+        },
+        "Metadata": {
+          "Duende.Bff.Yarp.TokenType": "User"
+        },
+        "Transforms": [ { "PathPattern": "{**catch-all}" } ]
+      },
+      "orders-route": {
+        "ClusterId": "orders-cluster",
+        "Match": {
+          "Path": "/orders/{**catch-all}"
+        },
+        "Metadata": {
+          "Duende.Bff.Yarp.TokenType": "User"
+        },
+        "Transforms": [ { "PathPattern": "{**catch-all}" } ]
+      },
+      "products-route": {
+        "ClusterId": "products-cluster",
+        "Match": {
+          "Path": "/products/{**catch-all}"
+        },
+        "Transforms": [ { "PathPattern": "{**catch-all}" } ]
+      }
+    },
+    "Clusters": {
+      "catalog-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:5000/api/v1/catalog"
+          }
+        }
+      },
+      "basket-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:5001/api/v1/basket"
+          }
+        }
+      },
+      "discount-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:5002/api/v1/discount"
+          }
+        }
+      },
+      "order-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:5004/api/v1/order"
+          }
+        }
+      },
+      "aggregator-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:5005/api/v1/shopping"
+          }
+        }
+      },
+      "orders-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "https://jsonplaceholder.typicode.com/users"
+          }
+        }
+      },
+      "products-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "https://jsonplaceholder.typicode.com/posts"
+          }
+        }
+      }
+    }
+  }
+}

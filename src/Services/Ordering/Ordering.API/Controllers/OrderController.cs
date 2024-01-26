@@ -2,6 +2,7 @@ using EventBus.Messages.Commands;
 using EventBus.Messages.Events;
 using MassTransit;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Ordering.Application.Features.Orders.Commands.DeleteOrder;
 using Ordering.Application.Features.Orders.Queries.GetOrderList;
@@ -30,6 +31,7 @@ public class OrderController : ControllerBase
     }
     
     [HttpGet("{userName}", Name = "GetOrder")]
+    [Authorize]
     public async Task<ActionResult> GetOrdersByUserName(string userName)
     {
         var result = await _mediator.Send(new GetOrderListQuery(userName));
@@ -37,6 +39,7 @@ public class OrderController : ControllerBase
     }
     
     [HttpGet("[action]/{orderId:guid}")]
+    [Authorize]
     public async Task<ActionResult> CheckOrder(Guid orderId)
     {
         var (accepted, rejected) = await _checkOrderRequestClient
@@ -62,6 +65,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpDelete("{id:guid}", Name = "DeleteOrder")]
+    [Authorize]
     public async Task<ActionResult> DeleteOrder(Guid id)
     {
         await _mediator.Send(new DeleteOrderCommand(id));

@@ -10,7 +10,9 @@ builder.Host.UseSerilog(SeriLogger.Configure);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-  
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<CatalogContextSeed>();
 builder.Services.AddScoped<ICatalogContext, CatalogContext>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
@@ -22,6 +24,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseStaticFiles();
 app.UseAuthorization();
 
 app.MapControllers();

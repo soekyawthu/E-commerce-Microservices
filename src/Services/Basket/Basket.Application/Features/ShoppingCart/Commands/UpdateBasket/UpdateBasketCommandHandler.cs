@@ -17,6 +17,7 @@ public class UpdateBasketCommandHandler : IRequestHandler<UpdateBasketCommand, b
     
     public async Task<bool> Handle(UpdateBasketCommand request, CancellationToken cancellationToken)
     {
+        request.ShoppingCartId = request.ShoppingCartId == Guid.Empty ? Guid.NewGuid() : request.ShoppingCartId;
         var shoppingCart = _mapper.Map<Domain.Entities.ShoppingCart>(request);
         var cart = await _repository.CreateOrUpdateBasket(shoppingCart);
 

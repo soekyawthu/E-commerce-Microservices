@@ -36,8 +36,8 @@ public static class InfrastructureServiceRegistration
             configurator.AddSagaStateMachine<OrderStateMachine, OrderState, OrderStateDefinition>()
                 .MongoDbRepository(r =>
                 {
-                    r.Connection = "mongodb://127.0.0.1:27021";
-                    r.DatabaseName = "orders";
+                    r.Connection = configuration["DatabaseSettings:ConnectionString"];//"mongodb://127.0.0.1:27021";
+                    r.DatabaseName = configuration["DatabaseSettings:DatabaseName"];
                 });
     
             configurator.UsingRabbitMq((ctx, cfg) =>

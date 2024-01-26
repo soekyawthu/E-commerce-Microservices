@@ -1,7 +1,11 @@
+using Common.Logging;
 using Inventory.API.Consumers;
 using MassTransit;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog(SeriLogger.Configure);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

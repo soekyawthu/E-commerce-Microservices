@@ -5,6 +5,7 @@ using Basket.Application.Features.ShoppingCart.Commands.UpdateBasket;
 using Basket.Application.Features.ShoppingCart.Queries.GetBasket;
 using Basket.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Basket.API.Controllers;
@@ -98,6 +99,7 @@ public class BasketController : ControllerBase
 
     [Route("[action]")]
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<ShoppingCart>> Checkout([FromBody] CheckoutBasketCommand command)
     {
         try
